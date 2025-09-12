@@ -1,0 +1,14 @@
+{
+    "containerApps.deploymentConfigurations": [
+        {
+            "label": "contappnameinvoice",
+            "type": "AcrDockerBuildRequest",
+            "dockerfilePath": "src\\Dockerfile",
+            "srcPath": "src",
+            "envPath": ".env",
+            "resourceGroup": "contapps-invoice",
+            "containerApp": "contappnameinvoice",
+            "containerRegistry": "contappsinvoice9b9fa1"
+        }
+    ]
+}
