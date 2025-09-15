@@ -72,8 +72,13 @@ def validate_invoice(request: UrlRequest):
     tools_list = [
         {
             "type": "file_search",
-            "vector_store_ids": [config.azure_vector_store_id],
+            "vector_store_ids": [config.azure_vector_store_id_get_business_rules],
             "max_num_results": 20,
+        },
+        {
+            "type": "file_search",
+            "vector_store_ids": [config.azure_vector_store_id_get_approver_email],
+            "max_num_results": 1,
         },
         {
             "type": "function",
@@ -101,8 +106,9 @@ def validate_invoice(request: UrlRequest):
     Note that Step 3 can be performed only after Step 1 and Step 2 are completed.
     Step 1: As a first step, you will extract the Contract ID and Supplier ID from the Purchase Invoice image along with all the line items from the Invoice in the form of a table.
     Step 2: You will then use the function tool by passing the Contract ID and Supplier ID to retrieve the contract details.
-    Step 3: You will then use the file search tool to retrieve the business rules applicable to detection of anomalies in the Procure to Pay process.
+    Step 3: You will then use the file search tool azure_vector_store_id_get_business_rules to retrieve the business rules applicable to detection of anomalies in the Procure to Pay process.
     Step 4: Then, apply the retrieved business rules to match the invoice line items with the contract details fetched from the system, and detect anomalies if any.
+    Step 5: If there is any anomalies You will then use the file search tool azure_vector_store_id_get_approver_email to retrieve the approver email and alternative approver for the given contract_id.
     Provide the list of anomalies detected in the Invoice, and the business rules that were violated.
     """
 

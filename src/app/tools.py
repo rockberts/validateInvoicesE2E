@@ -26,4 +26,4 @@ def retrieve_contract(contract_id: str, supplier_id: str) -> str:
     #print(json.dumps(json.loads(response.text), indent=4),    )
     return json.dumps(response.text)
 
-#retrieve_contract("CON000002","SUP0008")
+
