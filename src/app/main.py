@@ -1,3 +1,4 @@
+import re
 from urllib import response
 from app import config
 from typing import Optional
@@ -6,6 +7,7 @@ import json
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import requests
 import base64
@@ -101,15 +103,15 @@ def validate_invoice(request: UrlRequest):
         },
     ]
 
-    instructions = """
+    instructions = f"""
     This is a Procure to Pay process. You will be provided with the Purchase Invoice image as input.
     Note that Step 3 can be performed only after Step 1 and Step 2 are completed.
     Step 1: As a first step, you will extract the Contract ID and Supplier ID from the Purchase Invoice image along with all the line items from the Invoice in the form of a table.
     Step 2: You will then use the function tool by passing the Contract ID and Supplier ID to retrieve the contract details.
     Step 3: You will then use the file search tool azure_vector_store_id_get_business_rules to retrieve the business rules applicable to detection of anomalies in the Procure to Pay process.
     Step 4: Then, apply the retrieved business rules to match the invoice line items with the contract details fetched from the system, and detect anomalies if any.
-    Step 5: If there is any anomalies You will then use the file search tool azure_vector_store_id_get_approver_email to retrieve the approver email and alternative approver for the given contract_id.
-    Provide the list of anomalies detected in the Invoice, and the business rules that were violated.
+    Step 5: If there is any anomalies detected You will then use the file search tool azure_vector_store_id_get_approver_email to retrieve the approver email and alternative approver for the given contract_id.
+    Return in the response only a structured JSON which include the image_url {image_url}, contractID, supplierID, the anomalies if exits, the first_approvers_email, the alternative_approvers_email and include a field with the detailed_summary.
     """
 
     user_prompt = """
@@ -175,13 +177,15 @@ def validate_invoice(request: UrlRequest):
     print(f"**********Original Invoice from:{image_url}")
     print(response_2.output_text)
 
-    def custom_serializer(obj):
-        if isinstance(obj, set):
-            return list(obj)
-        elif hasattr(obj, '__dict__'):
-            return obj.__dict__
-        else:
-            return str(obj)
+    # Extraer el bloque JSON
+    match = re.search(r"```json(.*?)```", response_2.output_text, re.DOTALL)
+    if match:
+        json_text = match.group(1).strip()
+        try:
+            parsed_json = json.loads(json_text)
+            return JSONResponse(content=parsed_json)
+        except json.JSONDecodeError as e:
+            return JSONResponse(content={"error": "JSON parsing failed", "details": str(e)})
+    else:
+        return JSONResponse(content={"error": "No JSON block found in response"})
 
-    #return [{**vars(album), "blobUrl": request.blobUrl} for album in albums]
-    return json.dumps(response_2, default=custom_serializer, indent=4)
