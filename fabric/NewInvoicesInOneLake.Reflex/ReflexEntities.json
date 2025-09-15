@@ -1,0 +1,122 @@
+[
+  {
+    "uniqueIdentifier": "3e50a216-64d3-4e3c-a9c5-4f825e7e6475",
+    "payload": {
+      "name": "RealTimeHub",
+      "connection": {
+        "scope": "Artifact",
+        "tenantId": "0ed1f3f1-eec8-417c-b0d5-75cf02c65a84",
+        "workspaceId": "4a19ec65-14a7-40cd-9bb8-ee5571d177bb",
+        "artifactId": "d09710ff-3ce1-45de-8664-42a388efc856",
+        "eventGroupType": "Microsoft.Fabric.OneLakeEvents"
+      },
+      "filterSettings": {
+        "eventTypes": [
+          {
+            "name": "Microsoft.Fabric.OneLake.FileCreated"
+          }
+        ],
+        "filters": [
+          {
+            "values": [
+              "/Files/procu"
+            ],
+            "operatorType": "StringBeginsWith",
+            "key": "subject"
+          }
+        ]
+      }
+    },
+    "type": "realTimeHubSource-v1"
+  },
+  {
+    "uniqueIdentifier": "c5ac2ab4-6cf6-4242-b11f-763db06d878a",
+    "payload": {
+      "name": "OneLakeEvents event",
+      "definition": {
+        "type": "Event",
+        "instance": "{\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.1\",\"steps\":[{\"name\":\"SourceEventStep\",\"id\":\"eb353cd7-1cf0-4d1f-b228-e2473b5424b2\",\"rows\":[{\"name\":\"SourceSelector\",\"kind\":\"SourceReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"3e50a216-64d3-4e3c-a9c5-4f825e7e6475\"}]}]}]}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "e4f57e64-3bd1-4ef4-a6b5-c739849c4458",
+    "payload": {
+      "name": "invoiceurl",
+      "definition": {
+        "type": "Object"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "b6d1ce21-afc0-49a3-8dbe-69e0eb42b2a1",
+    "payload": {
+      "name": "blobUrl",
+      "parentObject": {
+        "targetUniqueIdentifier": "e4f57e64-3bd1-4ef4-a6b5-c739849c4458"
+      },
+      "definition": {
+        "type": "Attribute",
+        "instance": "{\"steps\":[{\"id\":\"f4eaa693-eef6-4dec-99c6-b175b007d86d\",\"name\":\"IdPartStep\",\"rows\":[{\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Text\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}],\"kind\":\"TypeAssertion\",\"name\":\"TypeAssertion\"}]}],\"templateId\":\"IdentityPartAttribute\",\"templateVersion\":\"1.2.2\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "4af8044f-2a6e-4c17-a2bb-2f6113295ad7",
+    "payload": {
+      "name": "blobUrl",
+      "parentObject": {
+        "targetUniqueIdentifier": "e4f57e64-3bd1-4ef4-a6b5-c739849c4458"
+      },
+      "definition": {
+        "type": "Attribute",
+        "instance": "{\"steps\":[{\"id\":\"db3350e0-a916-4188-b3fe-e68c360ae6e1\",\"name\":\"IdStructureStep\",\"rows\":[{\"arguments\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"b6d1ce21-afc0-49a3-8dbe-69e0eb42b2a1\"}],\"kind\":\"AttributeReference\",\"name\":\"idPart\",\"type\":\"complex\"}],\"kind\":\"IdPart\",\"name\":\"IdPart\"}]}],\"templateId\":\"IdentityTupleAttribute\",\"templateVersion\":\"1.2.2\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "8a1c6420-0b27-4d66-b59b-aa604ccdb6bf",
+    "payload": {
+      "name": "OneLakeEvents event",
+      "parentObject": {
+        "targetUniqueIdentifier": "e4f57e64-3bd1-4ef4-a6b5-c739849c4458"
+      },
+      "definition": {
+        "type": "Event",
+        "instance": "{\"steps\":[{\"id\":\"1aee9258-6f8f-4f25-ac5e-cac83afadf5d\",\"name\":\"SplitEventStep\",\"rows\":[{\"arguments\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"c5ac2ab4-6cf6-4242-b11f-763db06d878a\"}],\"kind\":\"EventReference\",\"name\":\"event\",\"type\":\"complex\"}],\"kind\":\"Event\",\"name\":\"EventSelector\"},{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"blobUrl\"},{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"b6d1ce21-afc0-49a3-8dbe-69e0eb42b2a1\"}],\"kind\":\"AttributeReference\",\"name\":\"idPart\",\"type\":\"complex\"}],\"kind\":\"FieldIdMapping\",\"name\":\"FieldIdMapping\"},{\"arguments\":[{\"name\":\"isAuthoritative\",\"type\":\"boolean\",\"value\":true}],\"kind\":\"EventOptions\",\"name\":\"SplitEventOptions\"}]}],\"templateId\":\"SplitEvent\",\"templateVersion\":\"1.2.2\"}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "279d592c-b6e6-40af-a6dd-4a07ed782724",
+    "payload": {
+      "name": "OneLakeEvents event alert",
+      "definition": {
+        "type": "Rule",
+        "instance": "{\"steps\":[{\"id\":\"08c6d2f0-38c9-4cac-91f1-8f6ae939cc1a\",\"name\":\"FieldsDefaultsStep\",\"rows\":[{\"arguments\":[{\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"c5ac2ab4-6cf6-4242-b11f-763db06d878a\"}],\"kind\":\"EventReference\",\"name\":\"event\",\"type\":\"complex\"}],\"kind\":\"Event\",\"name\":\"EventSelector\"}]},{\"id\":\"e1e465d1-4f0f-4f70-8690-dbac799af949\",\"name\":\"EventDetectStep\",\"rows\":[{\"arguments\":[],\"kind\":\"OnEveryValue\",\"name\":\"OnEveryValue\"}]},{\"id\":\"e06f049e-3ed1-48c1-9b29-a4428261a467\",\"name\":\"ActStep\",\"rows\":[{\"arguments\":[{\"arguments\":[{\"name\":\"sinkId\",\"type\":\"string\",\"value\":\"dab90e54-f0c6-4574-9350-f990b64d64bf\"}],\"kind\":\"SinkReference\",\"name\":\"sinkName\",\"type\":\"complex\"},{\"name\":\"inputFields\",\"type\":\"array\",\"values\":[{\"arguments\":[{\"name\":\"key\",\"type\":\"string\",\"value\":\"blobUrl\"},{\"name\":\"value\",\"type\":\"complexArray\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"​\"},{\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"blobUrl\"}],\"kind\":\"EventFieldReference\",\"type\":\"complexReference\"},{\"name\":\"string\",\"type\":\"string\",\"value\":\" \"}]}],\"kind\":\"KeyValuePair\",\"type\":\"complex\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[]}],\"kind\":\"PowerAutomateFlow\",\"name\":\"PowerAutomateBinding\",\"type\":\"row\"}]}],\"templateId\":\"EventTrigger\",\"templateVersion\":\"1.2.2\"}",
+        "settings": {
+          "shouldRun": true,
+          "shouldApplyRuleOnUpdate": true
+        }
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "dab90e54-f0c6-4574-9350-f990b64d64bf",
+    "payload": {
+      "name": "auditinvoice",
+      "parameters": [
+        {
+          "key": "blobUrl"
+        }
+      ]
+    },
+    "type": "powerAutomateFlowAction-v1"
+  }
+]

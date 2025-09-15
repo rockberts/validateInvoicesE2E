@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Reflex",
+    "displayName": "NewInvoicesInOneLake"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "220c548d-7419-9859-4b57-8321f1925e72"
+  }
+}
