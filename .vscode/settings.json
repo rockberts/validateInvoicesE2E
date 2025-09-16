@@ -9,6 +9,16 @@
             "resourceGroup": "contapps-invoice",
             "containerApp": "contappnameinvoice",
             "containerRegistry": "contappsinvoice9b9fa1"
+        },
+        {
+            "label": "auditinvocev2",
+            "type": "AcrDockerBuildRequest",
+            "dockerfilePath": "src\\Dockerfile",
+            "srcPath": "src",
+            "envPath": ".env",
+            "resourceGroup": "rg-re-demo-e2e-invoices",
+            "containerApp": "auditinvocev2",
+            "containerRegistry": "myregistryre"
         }
     ]
 }
