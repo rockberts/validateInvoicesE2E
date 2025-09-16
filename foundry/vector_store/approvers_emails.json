@@ -1,0 +1,17 @@
+[
+  {
+    "ContractID": "CON000001",
+    "FirstApprovalEmail": "usuariouno@MngEnvMCAP947028.onmicrosoft.com",
+    "AlternativeApprovalEmail": "usuariodos@MngEnvMCAP947028.onmicrosoft.com"
+  },
+  {
+    "ContractID": "CON000002",
+    "FirstApprovalEmail": "usuariodos@MngEnvMCAP947028.onmicrosoft.com",
+    "AlternativeApprovalEmail": "usuariouno@MngEnvMCAP947028.onmicrosoft.com"
+  },
+  {
+    "ContractID": "CON000003",
+    "FirstApprovalEmail": "usuariotres@MngEnvMCAP947028.onmicrosoft.com",
+    "AlternativeApprovalEmail": null
+  }
+]
