@@ -1,1 +1,0 @@
-#Lakehouse and data activator
