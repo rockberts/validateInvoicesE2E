@@ -2,6 +2,12 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+CREATE TABLE dbo.InvoiceApprovals (
+    [ContractID] [nvarchar](50) NOT NULL,
+    [FirstApprovalEmail] [nvarchar](70) NOT NULL,
+    [AlternativeApprovalEmail] [nvarchar](70) NOT NULL
+)
+GO
 CREATE TABLE [dbo].[contract_headers](
 	[ContractID] [nvarchar](50) NOT NULL,
 	[SupplierID] [nvarchar](50) NOT NULL,
@@ -4614,4 +4620,10 @@ INSERT [dbo].[contract_lines] ([ContractID], [LineID], [ItemID], [Quantity], [Un
 INSERT [dbo].[contract_lines] ([ContractID], [LineID], [ItemID], [Quantity], [UnitPrice], [TotalPrice], [DeliveryDate], [ItemDescription]) VALUES (N'CON001000', N'LINE003518', N'ITEM0014', 63, 462.66000366210938, 29147.580078125, CAST(N'2022-02-14' AS Date), N'Description for ITEM0014')
 INSERT [dbo].[contract_lines] ([ContractID], [LineID], [ItemID], [Quantity], [UnitPrice], [TotalPrice], [DeliveryDate], [ItemDescription]) VALUES (N'CON001000', N'LINE003519', N'ITEM0095', 62, 177.11000061035156, 10980.8203125, CAST(N'2022-05-14' AS Date), N'Description for ITEM0095')
 INSERT [dbo].[contract_lines] ([ContractID], [LineID], [ItemID], [Quantity], [UnitPrice], [TotalPrice], [DeliveryDate], [ItemDescription]) VALUES (N'CON001000', N'LINE003520', N'ITEM0032', 58, 380.73001098632812, 22082.33984375, CAST(N'2022-03-27' AS Date), N'Description for ITEM0032')
+GO
+INSERT INTO [dbo].[InvoiceApprovals] (ContractID, FirstApprovalEmail, AlternativeApprovalEmail)
+VALUES 
+('CON000001', 'aprobadoruno@gmail.com', 'aprobadordos@gmail.com'),
+('CON000002', 'aprobadordos@gmail.com', 'aprobadoruno@gmail.com'),
+('CON000003', 'aprobadortres@gmail.com', 'aprobadordos@gmail.com')
 GO
