@@ -48,6 +48,7 @@ app.add_middleware(
 
 class InvoiceResult(BaseModel):
     image_url: str
+    invoice_number: str
     contractID: str = None
     supplierID: str = None
     anomalies: list[str] = None
@@ -119,7 +120,7 @@ def validate_invoice(request: UrlRequest):
     Step 3: You will then use the file search tool azure_vector_store_id_get_business_rules to retrieve the business rules applicable to detection of anomalies in the Procure to Pay process.
     Step 4: Then, apply the retrieved business rules to match the invoice line items with the contract details fetched from the system, and detect anomalies if any.
     Step 5: If there is any anomalies detected You will then use the file search tool azure_vector_store_id_get_approver_email to retrieve the approver email and alternative approver for the given contract_id.
-    Return in the response only a structured JSON which include the image_url {image_url}, contractID, supplierID, the anomalies if exits, the first_approvers_email, the alternative_approvers_email and include a field with the detailed_summary.
+    Return in the response only a structured JSON which include the image_url {image_url}, invoice_number, contractID, supplierID, the anomalies if exits, the first_approvers_email, the alternative_approvers_email and include a field with the detailed_summary.
     """
 
     user_prompt = """
