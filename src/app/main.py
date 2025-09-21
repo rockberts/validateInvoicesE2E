@@ -46,6 +46,15 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+class InvoiceResult(BaseModel):
+    image_url: str
+    invoice_number: str
+    contractID: str = None
+    supplierID: str = None
+    anomalies: list[str] = None
+    first_approvers_email: str
+    alternative_approvers_email: str = None
+    detailed_summary: str = None
 
 class UrlRequest(BaseModel):
     blobUrl: str
@@ -111,7 +120,7 @@ def validate_invoice(request: UrlRequest):
     Step 3: You will then use the file search tool azure_vector_store_id_get_business_rules to retrieve the business rules applicable to detection of anomalies in the Procure to Pay process.
     Step 4: Then, apply the retrieved business rules to match the invoice line items with the contract details fetched from the system, and detect anomalies if any.
     Step 5: If there is any anomalies detected You will then use the file search tool azure_vector_store_id_get_approver_email to retrieve the approver email and alternative approver for the given contract_id.
-    Return in the response only a structured JSON which include the image_url {image_url}, contractID, supplierID, the anomalies if exits, the first_approvers_email, the alternative_approvers_email and include a field with the detailed_summary.
+    Return in the response only a structured JSON which include the image_url {image_url}, invoice_number, contractID, supplierID, the anomalies if exits, the first_approvers_email, the alternative_approvers_email and include a field with the detailed_summary.
     """
 
     user_prompt = """
@@ -167,25 +176,16 @@ def validate_invoice(request: UrlRequest):
         }
     )
 
-    response_2 = client.responses.create(
+    response_2 = client.responses.parse(
     model=config.azure_deployment_name,
     instructions=instructions,
     input=input_messages,
     tools=tools_list,
     tool_choice="auto",
+    temperature=0.2,
+    text_format=InvoiceResult
     )
     print(f"**********Original Invoice from:{image_url}")
     print(response_2.output_text)
-
-    # Extraer el bloque JSON
-    match = re.search(r"```json(.*?)```", response_2.output_text, re.DOTALL)
-    if match:
-        json_text = match.group(1).strip()
-        try:
-            parsed_json = json.loads(json_text)
-            return JSONResponse(content=parsed_json)
-        except json.JSONDecodeError as e:
-            return JSONResponse(content={"error": "JSON parsing failed", "details": str(e)})
-    else:
-        return JSONResponse(content={"error": "No JSON block found in response"})
-
+    return JSONResponse(content=json.loads(response_2.output_text))
+    
